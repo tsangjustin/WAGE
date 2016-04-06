@@ -40,7 +40,10 @@ void afterMath(int& row, int& column, int& numDays) {
 		// Traverse field to see change in value at end of each day
 		for (i = 0; i < row; ++i) {
 			for (j = 0; j < column; ++j) {
-
+				(*currField)[i][j]->isModified = false;
+				if ((*nextDayField)[i][j]->isModified == false) {
+					
+				}
 			}
 		}
 	}
