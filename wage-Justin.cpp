@@ -1,68 +1,97 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include <map>
+// #include <map>
 
 using namespace std;
 
-typedef struct landCell {
-	char landOwner;
-	bool isModified;
-} Cell;
+// A: 65
+// G: 71
+// W: 87
+//map<int, int> whoWins = {{-22, -87}, {22, 87}, {-6, 65}, {6, -65}, {-16, 71}, {16, -71}, {0, 0}};
+
+int whoWins(int diff) {
+	int returnChar = 0;
+	switch (diff) {
+		case (-22):
+			returnChar = -87;
+			break;
+		case (22):
+			returnChar = 87;
+			break;
+		case (-6):
+			returnChar = 65;
+			break;
+		case (6):
+			returnChar = -65;
+			break;
+		case (-16):
+			returnChar = 71;
+			break;
+		case (16):
+			returnChar = -71;
+			break;
+		default:
+			break;
+	}
+	return returnChar;
+}
 
 // void afterMath(int& row, int& column, int& numDays, char** battlefield) {
 void afterMath(int& row, int& column, int& numDays) {
 	// Instantiate room for battlefield and battlefield on next day
-	// TODO: Find if they are initialized to flase and empty char
-	Cell battlefield[row][column];
-	Cell nextDayMath[row][column];
-	Cell (*currField)[row][column] = &battlefield;
-	Cell (*nextDayField)[row][column] = &nextDayMath;
+	char battlefield[row][column];
+	char nextDayMath[row][column];
 	int i, j;
-	char teamAmerica;
 	// Create the initial battlefield
 	for (i = 0; i < row; ++i) {
 		for (j = 0; j < column; ++j) {
-			cin >> teamAmerica;
-			(*currField)[i][j]->landOwner = teamAmerica;
+			cin >> battlefield[i][j];
+			nextDayMath[i][j] = battlefield[i][j];
 		}
 	}
 
 	for (int currDay = 0; currDay < numDays; ++currDay) {
-		// Quickly switch pointers to each battlefield
-		// If at odd number of days
-		if ((currDay & 1) == 1) {
-			currField = &nextDayMath;
-			nextDayField = &battlefield;
-		// If at even number days
-		} else {
-			currField = &battlefield;
-			nextDayField = &nextDayMath;
-		}
 		// Traverse field to see change in value at end of each day
 		for (i = 0; i < row; ++i) {
 			for (j = 0; j < column; ++j) {
 				// Return negative means that the initial cell is changed
 				// Return positive means that the relative cell to initial cell is changed
 				int charAtCell;
-				(*currField)[i][j]->isModified = false;
-				if ((*nextDayField)[i][j]->isModified == false) {
-					// Create a map
-				}
-				if ((i < row - 1) && (*nextDayField)[i + 1][j]->isModified == false) {
-					if ((charAtCell = ) != '') {
-						(*nextDayField)[i + 1][j]->landOwner = charAtCell;
-						(*nextDayField)[i + 1][j]->isModified = true;
+				// If there is a cell below
+				if (i < row - 1) {
+					// Change initial cell at (i, j)
+					if ((charAtCell = whoWins(battlefield[i][j] - battlefield[i + 1][j])) < 0) {
+						nextDayMath[i][j] = (char)(-1 * charAtCell);
+					// Change value at cell at (i+1, j)
+					} else if (charAtCell > 0) {
+						nextDayMath[i + 1][j] = (char)charAtCell;
 					}
 				}
-				if ((j < column - 1) && (*nextDayField)[i][j + 1]->isModified == false) {
-					if ((charAtCell = ) != '') {
-						(*nextDayField)[i][j + 1]->landOwner = charAtCell;
-						(*nextDayField)[i][j + 1]->isModified = true;
+				// If there is cell to right
+				if (j < column - 1) {
+					// Change initial cell at (i, j)
+					if ((charAtCell = whoWins(battlefield[i][j] - battlefield[i][j + 1])) < 0) {
+						nextDayMath[i][j] = (char)(-1 * charAtCell);
+					// Change value at cell at (i, j+1)
+					} else if (charAtCell > 0) {
+						nextDayMath[i][j + 1] = (char)charAtCell;
 					}
 				}
 			}
 		}
+		for (i = 0; i < row; ++i) {
+			for (j = 0; j < column; ++j) {
+				battlefield[i][j] = nextDayMath[i][j];
+			}
+		}
+	}
+	// Print the outcome of the battle for numDays days
+	for (i = 0; i < row; ++i) {
+		for (j = 0; j < column; ++j) {
+			cout << battlefield[i][j];
+		}
+		cout << "\n";
 	}
 }
 
@@ -74,12 +103,6 @@ int main() {
 		int row, column, numDays;
 		cin >> row >> column >> numDays;
 		afterMath(row, column, numDays);
-		// for (int r = 0; r < row; ++r) {
-		// 	for (int col = 0; col < column; ++col) {
-		// 		cout << battlefield[r][col] << " ";
-		// 	}
-		// 	cout << "\n";
-		// }
 	}
 	return 0;
 }
