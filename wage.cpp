@@ -11,18 +11,10 @@ using namespace std;
 //map<int, int> whoWins = {{-22, -87}, {22, 87}, {-6, 65}, {6, -65}, {-16, 71}, {16, -71}, {0, 0}};
 
 // void afterMath(int& row, int& column, int& numDays, char** battlefield) {
-void afterMath(int& row, int& column, int& numDays) {
+void afterMath(int& row, int& column, int& numDays, int* diff) {
 	// Instantiate room for battlefield and battlefield on next day
 	char battlefield[row][column];
 	char nextDayMath[row][column];
-	int diff[45];
-	diff[0] = -87;
-	diff[6] = 71;
-	diff[16] = 65;
-	diff[22] = 0;
-	diff[28] = -65;
-	diff[38] = -71;
-	diff[44] = 87;
 	// for (int i = 0; i < 45; ++i) {
 	// 	cout << diff[i] << " ";
 	// }
@@ -82,10 +74,18 @@ int main() {
 	//ios::sync_with_stdio(false);
 	int numTestCases;
 	cin >> numTestCases;
+	int diff[45];
+	diff[0] = -87;
+	diff[6] = 71;
+	diff[16] = 65;
+	diff[22] = 0;
+	diff[28] = -65;
+	diff[38] = -71;
+	diff[44] = 87;
 	for (int currCase = 0; currCase < numTestCases; ++currCase) {
 		int row, column, numDays;
 		cin >> row >> column >> numDays;
-		afterMath(row, column, numDays);
+		afterMath(row, column, numDays, diff);
 	}
 	return 0;
 }
